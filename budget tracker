@@ -1,0 +1,61 @@
+class BudgetTracker:
+    def __init__(self):
+        self.budget = 0
+        self.expenses = {}
+        self.categories = {}
+    
+    def set_budget(self):
+        """Set the total budget."""
+        self.budget = float(input("Enter your total budget: "))
+    
+    def add_category(self):
+        """Add a category and set a budget limit for it."""
+        category = input("Enter the category (e.g., Food, Rent): ")
+        limit = float(input(f"Enter the budget limit for {category}: "))
+        self.categories[category] = limit
+        self.expenses[category] = 0.0  # Initialize the expense for this category
+
+    def add_expense(self):
+        """Add an expense."""
+        category = input("Enter the category of the expense: ")
+        if category in self.categories:
+            amount = float(input(f"Enter the expense amount for {category}: "))
+            self.expenses[category] += amount
+        else:
+            print("Category does not exist. Please add it first.")
+    
+    def view_summary(self):
+        """View the summary of expenses and remaining budget."""
+        total_expenses = sum(self.expenses.values())
+        print("\n--- Budget Summary ---")
+        print(f"Total Budget: {self.budget}")
+        print(f"Total Expenses: {total_expenses}")
+        print(f"Remaining Budget: {self.budget - total_expenses}\n")
+        
+        # Show expenses per category
+        for category, expense in self.expenses.items():
+            print(f"{category}: ${expense} (Limit: ${self.categories[category]})")
+    
+    def track(self):
+        """Main loop to manage the app."""
+        while True:
+            print("\n1. Set Budget\n2. Add Category\n3. Add Expense\n4. View Summary\n5. Exit")
+            choice = input("Choose an option: ")
+            
+            if choice == '1':
+                self.set_budget()
+            elif choice == '2':
+                self.add_category()
+            elif choice == '3':
+                self.add_expense()
+            elif choice == '4':
+                self.view_summary()
+            elif choice == '5':
+                print("Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+# Running the Budget Tracker
+tracker = BudgetTracker()
+tracker.track()
