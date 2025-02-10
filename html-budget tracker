@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px; margin: 5px; }
+        .summary { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Budget Tracker</h1>
+    
+    <div>
+        <label for="totalBudget">Set your Total Budget:</label>
+        <input type="number" id="totalBudget" placeholder="Total Budget">
+        <button onclick="setBudget()">Set Budget</button>
+    </div>
+    
+    <div>
+        <label for="category">Enter Category:</label>
+        <input type="text" id="category" placeholder="Category (e.g., Food, Rent)">
+        <label for="limit">Set Budget Limit for Category:</label>
+        <input type="number" id="limit" placeholder="Limit for Category">
+        <button onclick="addCategory()">Add Category</button>
+    </div>
+    
+    <div>
+        <label for="expenseCategory">Enter Expense Category:</label>
+        <input type="text" id="expenseCategory" placeholder="Category">
+        <label for="expenseAmount">Expense Amount:</label>
+        <input type="number" id="expenseAmount" placeholder="Amount">
+        <button onclick="addExpense()">Add Expense</button>
+    </div>
+
+    <div class="summary">
+        <button onclick="viewSummary()">View Summary</button>
+        <pre id="summary"></pre>
+    </div>
+
+    <script>
+        let budget = 0;
+        let categories = {};
+        let expenses = {};
+
+        function setBudget() {
+            budget = parseFloat(document.getElementById("totalBudget").value);
+            alert("Total Budget Set: $" + budget);
+        }
+
+        function addCategory() {
+            let category = document.getElementById("category").value;
+            let limit = parseFloat(document.getElementById("limit").value);
+            if (category && !categories[category]) {
+                categories[category] = { limit: limit, expenses: 0 };
+                alert(`Category ${category} added with a limit of $${limit}`);
+            } else {
+                alert("Category already exists or invalid input.");
+            }
+        }
+
+        function addExpense() {
+            let category = document.getElementById("expenseCategory").value;
+            let amount = parseFloat(document.getElementById("expenseAmount").value);
+            if (categories[category]) {
+                categories[category].expenses += amount;
+                alert(`Added $${amount} to ${category}`);
+            } else {
+                alert("Category does not exist. Please add it first.");
+            }
+        }
+
+        function viewSummary() {
+            let totalExpenses = 0;
+            let summary = `Total Budget: $${budget}\nTotal Expenses: $${totalExpenses}\nRemaining Budget: $${budget - totalExpenses}\n\n`;
+
+            for (let category in categories) {
+                let expense = categories[category].expenses;
+                totalExpenses += expense;
+                summary += `${category}: $${expense} (Limit: $${categories[category].limit})\n`;
+            }
+
+            summary += `\nTotal Expenses: $${totalExpenses}`;
+            document.getElementById("summary").innerText = summary;
+        }
+    </script>
+</body>
+</html>
